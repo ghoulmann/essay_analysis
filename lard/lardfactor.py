@@ -1,5 +1,6 @@
+#!/usr/bin/python
 """
-count percent of verbs that are auxiary verbs
+count percent of verbs that are auxiliary verbs
 """
 
 import nltk
