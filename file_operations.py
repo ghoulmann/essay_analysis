@@ -24,7 +24,8 @@ class FileOperations:
         self.path = path
         if os.path.isfile(self.path):
             self.file_name = os.path.basename(path)
-            self.guessed_type = MimeTypes.mime.guess_type(self.path)
+            self.mime = MimeTypes()
+            self.guessed_type = mimetypes.guess_type(path)
             self.file_type = self.guessed_type[0]
             self.raw_text = self.get_raw_text(self.path, self.file_name, self.file_type)
 
@@ -32,12 +33,12 @@ class FileOperations:
         if "text" in self.file_type:
             with open(self.path) as fobj:
                 raw_text = fobj.read()
-            elif "pdf" in self.file_type:
-                raw_text = pdf_to_text(self.path)
-            elif "docx" in self.file_type:
-                raw_text = docx_to_text(self.path)
-            else:
-                msg = print(file_name + "is not a compatible document.")
+        elif "pdf" in self.file_type:
+            raw_text = pdf_to_text(self.path)
+        elif "docx" in self.file_type:
+            raw_text = docx_to_text(self.path)
+        else:
+            msg = file_name + "is not a compatible document."
         return raw_text
 
     def docx_to_text(path):
