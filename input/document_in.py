@@ -19,7 +19,7 @@ from pdfminer.layout import LAParams
 from pdfminer.pdfpage import PDFPage
 from cStringIO import StringIO
 
-class FileOperations:
+class Document:
     def __init__(self, path, *author):
         self.path = path
         self.author = author
