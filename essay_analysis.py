@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 
+"""
+Intended as the CLI entry point for the thing.
+"""
+
 import sys
 import document_in
 
 def main(path, *string):
-    Document = document_in.FileOperations(path, string)
+    Document = document_in.Document(path, string)
     print(Document.path)
     print(Document.author)
 
