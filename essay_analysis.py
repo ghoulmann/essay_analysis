@@ -5,15 +5,16 @@ Intended as the CLI entry point for the thing.
 """
 
 import sys
-import document_in
+from input import document_in as input
 
 def main(path, *string):
-    Document = document_in.Document(path, string)
+    Document = input.Document(path, string)
     print(Document.path)
     print(Document.author)
 
 def usage():
     print "Requires path, 'author name'."
+
 
 if __name__ == "__main__":
     print(sys.argv)
