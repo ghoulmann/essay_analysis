@@ -17,6 +17,7 @@ class Sample:
     def __init__(self, path, *author):
         self.path = path
         self.author = author
+        self.abs_path = os.path.abspath(self.path)
         if os.path.isfile(self.path):
             self.file_name = os.path.basename(path)
             self.mime = MimeTypes()

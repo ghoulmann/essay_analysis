@@ -1,4 +1,13 @@
 # -*- coding: utf-8 -*-
+
+"""
+Original class definition for document
+to be analyzed.
+
+read_document is a leaner version that has
+one more (heavy) dependency.
+"""
+
 import os, sys
 from mimetypes import MimeTypes
 

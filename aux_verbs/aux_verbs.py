@@ -1,0 +1,26 @@
+def aux_verb_check(text):
+    flags = [
+        "am",
+        "is",
+        "are",
+        "was",
+        "were",
+        "be",
+        "being",
+        "been",
+        "can",
+        "could",
+        "shall",
+        "should",
+        "will",
+        "would",
+        "may",
+        "might",
+        "must",
+        "do",
+        "does",
+        "did",
+        "has",
+        "have",
+        "had"
+        ]

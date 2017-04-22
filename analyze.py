@@ -5,20 +5,25 @@ Intended as the CLI entry point for the thing.
 """
 
 import sys
-from input import document_in as input
+import os
+from input import read_document as input
 
 def main(path, *string):
-    Document = input.Document(path, string)
+    Document = input.Sample(path, string)
+    print(Document.raw_text)
     print(Document.path)
     print(Document.author)
+    print(Document.abs_path)
 
 def usage():
     print "Requires path, 'author name'."
 
 
 if __name__ == "__main__":
-    print(sys.argv)
     if len(sys.argv) == 3:
-        main(sys.argv[1], sys.argv[2])
+        if os.path.isfile(sys.argv[1]):
+            main(sys.argv[1], str(sys.argv[2]))
+        else:
+            usage()
     else:
         usage()
