@@ -3,6 +3,7 @@ import os, sys
 import textract
 from mimetypes import MimeTypes
 from nltk import tokenize
+from passive.passive import main as passive
 """
 Creates document instance for analysis.
 
@@ -29,9 +30,13 @@ class Sample:
             self.sentence_count = len(self.sentence_tokens)
             self.be_verb_examples = self.to_be_test(self.sentence_tokens)
             self.be_verb_sentences = len(self.be_verb_examples)
-            self.be_verb_precent = (str(100 * \
+            self.be_verb_percent = (str(100 * \
                 (float(self.be_verb_sentences)/float(self.sentence_count))) + " %")
             self.be_verb_example = self.be_verb_examples[1]
+            self.passive_sentences = passive(self.text_no_cr)
+            self.passive_sentence_count = len(self.passive_sentences)
+            self.percent_passive = (100 * \
+                (float(passive_sentence_count)/float(self.sentence_count))
     def to_be_test(self, sentence_list):
         """
         Find to be verb occurences in list of sentences.
