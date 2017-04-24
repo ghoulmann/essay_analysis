@@ -14,6 +14,8 @@ def main(path, *string):
     print(Document.path)
     print(Document.author)
     print(Document.abs_path)
+    #print(Document.be_verb_count)
+    #print(str(Document.be_verb_ratio) + " %")
 
 def usage():
     print "Requires path, 'author name'."
