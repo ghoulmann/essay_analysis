@@ -25,7 +25,7 @@ class Sample:
             self.guessed_type = self.mime.guess_type(self.path)
             self.file_type = self.guessed_type[0]
             self.raw_text = textract.process(self.path)
-            self.text_no_cr = self.raw_text.replace("\n", " ").replace("\r", " ")
+            self.text_no_cr = self.replace("\n", " ").replace("\r", " ")
             self.sentence_tokens = tokenize.sent_tokenize(self.text_no_cr)
             self.sentence_count = len(self.sentence_tokens)
             self.be_verb_examples = self.to_be_test(self.sentence_tokens)
@@ -36,7 +36,7 @@ class Sample:
             self.passive_sentences = passive(self.text_no_cr)
             self.passive_sentence_count = len(self.passive_sentences)
             self.percent_passive = (100 * \
-                (float(passive_sentence_count)/float(self.sentence_count))
+                (float(passive_sentence_count)/float(self.sentence_count)))
     def to_be_test(self, sentence_list):
         """
         Find to be verb occurences in list of sentences.
