@@ -39,17 +39,27 @@ class Sample:
             self.passive_sentence_count = len(self.passive_sentences)
             self.percent_passive = (100 * \
                 (float(self.passive_sentence_count)/float(self.sentence_count)))
-            self.be_verb_count = self.prepare_check( self.sentence_tokens)
+            self.be_verb_count = self.count_be_verbs(self.sentence_tokens)
 
+    def count_be_verbs(self, sentences):
+        self.verbs = [" am ", " is ", " are ", " was ", " were ", " be ", " being ", " been "]
+        self.verb_count = 0
+        for sentence in sentences:
+            for verb in self.verbs:
+                if verb in sentence:
+                    self.verb_count = self.verb_count + 1
 
+        return self.verb_count
+
+"""
     def prepare_check(self, sentence_tokens):
-        """
+
         Issue sentences for to_be_check.
 
         Returns:
         var int count of "to be" verbs
 
-        """
+
         self.weak_verbs = 0
         for sentence in sentence_tokens:
             if self.to_be_check(sentence):
@@ -57,7 +67,7 @@ class Sample:
         return self.weak_verbs
 
     def to_be_check(self, sentence):
-        """
+
         Find to be verb occurences in a sentence.
 
         Iterarate through a list of be_verbs to see if any are in a sentence.
@@ -66,7 +76,7 @@ class Sample:
         Returns:
         var Bool
 
-        """
+
         self.weak_sentences = []
         self.verbs = [" am ", " is ", " are ", " was ", " were ", " be ", " being ", " been "]
 
@@ -77,3 +87,4 @@ class Sample:
                 return True
             else:
                 return False
+"""
