@@ -39,17 +39,20 @@ class Sample:
             self.passive_sentence_count = len(self.passive_sentences)
             self.percent_passive = (100 * \
                 (float(self.passive_sentence_count)/float(self.sentence_count)))
-            self.be_verb_count = self.count_be_verbs(self.sentence_tokens)
+            self.be_verb_analysis = self.count_be_verbs(self.sentence_tokens)
 
     def count_be_verbs(self, sentences):
         self.verbs = [" am ", " is ", " are ", " was ", " were ", " be ", " being ", " been "]
+        self.weak_sentences = []
         self.verb_count = 0
         for sentence in sentences:
             for verb in self.verbs:
                 if verb in sentence:
                     self.verb_count = self.verb_count + 1
+                    self.weak_sentences.append(sentence)
 
-        return self.verb_count
+
+        return [self.verb_count, self.weak_sentences]
 
 """
     def prepare_check(self, sentence_tokens):
