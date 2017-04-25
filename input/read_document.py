@@ -26,7 +26,6 @@ class Sample:
             self.guessed_type = self.mime.guess_type(self.path)
             self.file_type = self.guessed_type[0]
             self.raw_text = textract.process(self.path)
-            self.raw_text = self.raw_text
             self.text_no_cr = self.raw_text.decode('utf-8').replace("\n", " ").replace("\r", " ")
             self.sentence_tokens = tokenize. \
                 sent_tokenize(self.text_no_cr)
@@ -65,40 +64,16 @@ class Sample:
 
 
         Returns:
-
         var Bool
 
         """
         self.weak_sentences = []
-        self.verbs = ["am", "is", "are", "was", "were", "be", "being", "been"]
+        self.verbs = [" am ", " is ", " are ", " was ", " were ", " be ", " being ", " been "]
 
         for verb in self.verbs:
             if verb in sentence:
+                self.weak_sentences.append(sentence) # Testing
+                print self.weak_sentences            # Testing
                 return True
             else:
                 return False
-
-
-"""
-    def to_be_test(self, sentence_list):
-
-        Find to be verb occurences in list of sentences.
-
-        Currently not working correctly; for each verb in be_verbs
-        iterate through sentences looking for sentences with the word.
-
-        Returns:
-
-
-
-        self.weak_sentences = []
-        self.be_verbs = ["am", "is", "are", "was", "were", "be",
-            "being", "been"]
-        for word in self.be_verbs:
-            for sentence in sentence_list:
-                if word in sentence:
-                    self.weak_sentence = str("Weak Verb: " + sentence)
-                    self.weak_sentences.append(self.weak_sentence)
-
-        return self.weak_sentences
-"""
