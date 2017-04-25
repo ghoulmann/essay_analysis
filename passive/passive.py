@@ -60,7 +60,7 @@ def list_if_passive(sentence):
     if passivep(tags):
         #print "* passive:", oneline(sent)
         #fh = open("./results.txt", "a")
-        passive_sentence = "PASSIVE: " + sentence
+        passive_sentence = sentence
         if passive_sentence:
             return passive_sentence
         else:

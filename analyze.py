@@ -10,10 +10,18 @@ import argparse
 from input import read_document as input
 
 def main(path, *author):
-    Document = input.Sample(path, author)
+    """
+    """
+
+    if author:
+        Document = input.Sample(path, author)
+    else:
+        Document = input.Sample(path)
+
     print("Base Name: " + Document.file_name)
     print("Relative path to file: " + Document.path)
-    print("Author: " + str(Document.author))
+    if author:
+        print("Author: " + str(Document.writer))
     print("Absolute path to file: " + Document.abs_path)
     print("Weak Verbs to Sentences: " + str(Document.weak_verbs_to_sentences))
     print("Weak verb count: " + str(Document.be_verb_count))
@@ -26,11 +34,13 @@ def main(path, *author):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Analyze Student Writing')
     parser.add_argument("filename", help="set path to file to analyze")
-    parser.add_argument('-a', '--author', help="set writer's name", action="store", type=str, nargs='?')
-    parser.add_argument('-v', '--verbose', help="verbose output", action="store_true")
+    parser.add_argument('-a', '--author', help="set writer's name", action="store", nargs=1)
+    parser.add_argument('-v', '--verbose', help="detailed output", action="store_true")
     args = parser.parse_args()
+
     """
     .. todo:: add arguments for doc title and teacher name
+
     """
 
 
@@ -38,13 +48,14 @@ if __name__ == "__main__":
         filename = args.filename
 
     if args.author:
-        author = str(args.author)
-    else:
-        author = ""
+        author = args.author
+        print type(args.author)
+
 
     if args.verbose:
         print "Path to file: " + args.filename
-        print "Author: " + args.author
 
-
-    main(filename, author)
+    if not args.author:
+        main(filename)
+    else:
+        main(filename, author)

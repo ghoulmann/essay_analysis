@@ -16,9 +16,10 @@ textract.
 #from mimetypes import MimeTypes
 
 class Sample:
-    def __init__(self, path, *author):
+    def __init__(self, path, *writer):
         self.path = path
-        self.author = author
+        if writer:
+            self.writer = writer
         self.abs_path = os.path.abspath(self.path)
         if os.path.isfile(self.path):
             self.file_name = os.path.basename(path)
@@ -26,15 +27,10 @@ class Sample:
             self.guessed_type = self.mime.guess_type(self.path)
             self.file_type = self.guessed_type[0]
             self.raw_text = textract.process(self.path)
-            self.text_no_cr = self.raw_text.decode('utf-8').replace("\n", " ").replace("\r", " ")
+            self.text_no_cr = self.raw_text.replace("\n", " ").replace("\r", " ")
             self.sentence_tokens = tokenize. \
                 sent_tokenize(self.text_no_cr)
             self.sentence_count = len(self.sentence_tokens)
-            #self.be_verb_examples = self.to_be_test(self.sentence_tokens)
-            #self.be_verb_sentences = len(self.be_verb_examples)
-            #self.be_verb_percent = (str(100 * \
-            #    (float(self.be_verb_sentences)/float(self.sentence_count))) + " %")
-            #self.be_verb_example = self.be_verb_examples[1]
             self.passive_sentences = passive(self.text_no_cr.decode('utf-8'))
             self.passive_sentence_count = len(self.passive_sentences)
             self.percent_passive = (100 * \
