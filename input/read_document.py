@@ -40,6 +40,11 @@ class Sample:
             self.percent_passive = (100 * \
                 (float(self.passive_sentence_count)/float(self.sentence_count)))
             self.be_verb_analysis = self.count_be_verbs(self.sentence_tokens)
+            self.be_verb_count = self.be_verb_analysis[0]
+            self.weak_sentences_all = self.be_verb_analysis[1]
+            self.weak_sentences_set = set(self.weak_sentences_all)
+            self.weak_sentences_count = len(self.weak_sentences_set)
+            self.weak_verbs_to_sentences = str(100 * float(self.weak_sentences_count)/float(self.sentence_count)) + " %"
 
     def count_be_verbs(self, sentences):
         self.verbs = [" am ", " is ", " are ", " was ", " were ", " be ", " being ", " been "]
@@ -53,41 +58,3 @@ class Sample:
 
 
         return [self.verb_count, self.weak_sentences]
-
-"""
-    def prepare_check(self, sentence_tokens):
-
-        Issue sentences for to_be_check.
-
-        Returns:
-        var int count of "to be" verbs
-
-
-        self.weak_verbs = 0
-        for sentence in sentence_tokens:
-            if self.to_be_check(sentence):
-                self.weak_verbs = self.weak_verbs + 1
-        return self.weak_verbs
-
-    def to_be_check(self, sentence):
-
-        Find to be verb occurences in a sentence.
-
-        Iterarate through a list of be_verbs to see if any are in a sentence.
-
-
-        Returns:
-        var Bool
-
-
-        self.weak_sentences = []
-        self.verbs = [" am ", " is ", " are ", " was ", " were ", " be ", " being ", " been "]
-
-        for verb in self.verbs:
-            if verb in sentence:
-                self.weak_sentences.append(sentence) # Testing
-                print self.weak_sentences            # Testing
-                return True
-            else:
-                return False
-"""
