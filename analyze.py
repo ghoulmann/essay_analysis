@@ -23,15 +23,15 @@ def main(path, *author):
     print("Example weak-verb usage: " + Document.weak_sentences_all[-2])
 
 
-
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Analyze Student Writing')
     parser.add_argument("filename", help="set path to file to analyze")
     parser.add_argument('-a', '--author', help="set writer's name", action="store", type=str, nargs='?')
     parser.add_argument('-v', '--verbose', help="verbose output", action="store_true")
-
     args = parser.parse_args()
+    """
+    .. todo:: add arguments for doc title and teacher name
+    """
 
 
     if os.path.isfile(args.filename):
