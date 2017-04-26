@@ -119,4 +119,4 @@ class Sample:
 
     def syllable_count(self, word):
            self.d = cmudict.dict()
-           return min([len([y for y in x if isdigit (y[-1])]) for x in self.d[word.lower()]])
+           return min([len([y for y in x if isdigit (y[-1])]) for x in self.d[str(word).lower()]])
