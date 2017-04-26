@@ -10,6 +10,7 @@ from collections import Counter
 from nltk import FreqDist
 from nltk.corpus import cmudict
 from curses.ascii import isdigit
+from nltk.tokenize import RegexpTokenizer
 """
 Creates document instance for analysis.
 
@@ -57,19 +58,24 @@ class Sample:
                 print("Error: Could not process passive voice analyses.")
                 print("Error: Could not process verb analyses.")
             self.word_tokens = self.word_tokenize(self.text_no_feed)
-            if self.word_tokens:
+            self.word_tokens_no_punct = self.word_tokenize_no_punct(self.text_no_feed)
+            if self.word_tokens_no_punct:
                 self.word_count = len(self.word_tokens)
                 self.page_length = self.word_count/250
-                self.parts_of_speech = pos_tag(self.word_tokens)
+                self.parts_of_speech = pos_tag(self.word_tokens_no_punct)
                 self.pos_counts = Counter(tag for word,tag in self.parts_of_speech)
                 self.pos_total = sum(self.pos_counts.values())
                 self.pos_freq = dict((word, float(count)/self.pos_total) for word,count in self.pos_counts.items())
             if self.word_count:
                 self.doc_pages = round(float(self.word_count)/float(250))
-            elif self.word_tokens:
-                self.doc_pages = round(float(self.word_tokens)/float(250))
+            elif self.word_tokens_no_punct:
+                self.doc_pages = round(float(self.word_tokens_no_punct)/float(250))
             else:
                 self.doc_pages = False
+
+    def word_tokenize_no_punct(self, text):
+        tokenizer = RegexpTokenizer(r'\w+')
+        return tokenizer.tokenize(text)
 
     def word_tokenize(self, paragraph):
         try:
