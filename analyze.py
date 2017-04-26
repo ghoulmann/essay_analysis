@@ -29,7 +29,8 @@ def main(path, *author):
     print("Sentence Count: " + str(Document.sentence_count))
     print("Example passive sentence from document: " + Document.passive_sentences[-1])
     print("Example weak-verb usage: " + Document.weak_sentences_all[-2])
-
+    for word, frequency in Document.freq_words:
+        print(u'{} ({}x)'.format(word, frequency))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Analyze Student Writing')
