@@ -11,6 +11,7 @@ from nltk import FreqDist
 from nltk.corpus import cmudict
 from curses.ascii import isdigit
 from nltk.tokenize import RegexpTokenizer
+from nltk.corpus import stopwords
 """
 Creates document instance for analysis.
 
@@ -60,7 +61,7 @@ class Sample:
             self.word_tokens = self.word_tokenize(self.text_no_feed)
             self.word_tokens_no_punct = self.word_tokenize_no_punct(self.text_no_feed)
             if self.word_tokens_no_punct:
-                self.word_count = len(self.word_tokens)
+                self.word_count = len(self.word_tokens_no_punct)
                 self.page_length = self.word_count/250
                 self.parts_of_speech = pos_tag(self.word_tokens_no_punct)
                 self.pos_counts = Counter(tag for word,tag in self.parts_of_speech)
@@ -72,6 +73,14 @@ class Sample:
                 self.doc_pages = round(float(self.word_tokens_no_punct)/float(250))
             else:
                 self.doc_pages = False
+            self.freq_words = self.word_frequency(self.word_tokens_no_punct)
+
+    def word_frequency(self, words):
+        #words = [word for word in words if not word.isnumeric()]
+        words = [word.lower() for word in words]
+        self.word_dist = FreqDist(words)
+        return self.word_dist.most_common(50)
+
 
     def word_tokenize_no_punct(self, text):
         tokenizer = RegexpTokenizer(r'\w+')
