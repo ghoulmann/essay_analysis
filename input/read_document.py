@@ -12,6 +12,9 @@ from nltk.corpus import cmudict
 from curses.ascii import isdigit
 from nltk.tokenize import RegexpTokenizer
 from nltk.corpus import stopwords
+import string
+import nltk
+from textstat import textstat
 
 """
 Creates document instance for analysis.
@@ -24,10 +27,9 @@ textract.
 #from mimetypes import MimeTypes
 
 class Sample:
-    def __init__(self, path, *writer):
+    def __init__(self, path):
+        self.user = ""
         self.path = path
-        if writer:
-            self.writer = writer
         self.abs_path = os.path.abspath(self.path)
         if os.path.isfile(self.path):
             self.file_name = os.path.basename(path)
@@ -69,24 +71,37 @@ class Sample:
                 self.pos_total = sum(self.pos_counts.values())
                 self.pos_freq = dict((word, float(count)/self.pos_total) for word,count in self.pos_counts.items())
             if self.word_count:
-                self.doc_pages = round(float(self.word_count)/float(250))
+                self.doc_pages = (float(self.word_count)/float(250))
             elif self.word_tokens_no_punct:
                 self.doc_pages = round(float(self.word_tokens_no_punct)/float(250))
             else:
                 self.doc_pages = False
             self.freq_words = self.word_frequency(self.word_tokens_no_punct)
-            self.ws_tokenz = ws_tokenize(self.text_no_feed)
-
+            # self.ws_tokens = self.ws_tokenize(self.text_no_feed)
+            self.polysyllable_count = self.polysyllables(self.text_no_feed)
+            self.syllable_count = self.syllables_per_word\
+                (self.word_tokens_no_punct)
+    """
     def ws_tokenize(self, text):
         self.tokenizer = nltk.tokenize.regexp.WhitespaceTokenizer()
         text = text.lower
-        return tokenizer.tokenize(text)
+        return self.tokenizer.tokenize(text)
+    """
+    def syllables_per_word(self, text):
+        self.word_syllables = []
+        for word in text:
+            self.word_syllables.append([word, textstat.textstat.syllable_count(word)])
+        return self.word_syllables
+
+
+
+    def polysyllables(self, text):
+        return textstat.textstat.polysyllabcount(text)
     def word_frequency(self, words):
         #words = [word for word in words if not word.isnumeric()]
         words = [word.lower() for word in words]
         self.word_dist = FreqDist(words)
         return self.word_dist.most_common(50)
-
 
     def word_tokenize_no_punct(self, text):
         tokenizer = RegexpTokenizer(r'\w+')
