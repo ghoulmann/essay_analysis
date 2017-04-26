@@ -12,6 +12,7 @@ from nltk.corpus import cmudict
 from curses.ascii import isdigit
 from nltk.tokenize import RegexpTokenizer
 from nltk.corpus import stopwords
+
 """
 Creates document instance for analysis.
 
@@ -74,7 +75,12 @@ class Sample:
             else:
                 self.doc_pages = False
             self.freq_words = self.word_frequency(self.word_tokens_no_punct)
+            self.ws_tokenz = ws_tokenize(self.text_no_feed)
 
+    def ws_tokenize(self, text):
+        self.tokenizer = nltk.tokenize.regexp.WhitespaceTokenizer()
+        text = text.lower
+        return tokenizer.tokenize(text)
     def word_frequency(self, words):
         #words = [word for word in words if not word.isnumeric()]
         words = [word.lower() for word in words]
