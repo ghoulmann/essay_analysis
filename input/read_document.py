@@ -84,16 +84,22 @@ class Sample:
 
             self.ws_tokens = self.ws_tokenize(self.text_no_feed)
             self.word_tokens_no_punct = self.tokenize_no_punctuation(self.text_no_feed)
-            self.readabilty_flesh_re =
+            self.readability_flesh_re = \
                 textstat.flesch_reading_ease(self.text_no_feed)
-            self.readability_smog_index =
+            self.readability_smog_index = \
                 textstat.smog_index(self.text_no_feed)
-            self.readability_flesh_kincaid_grade =
+            self.readability_flesh_kincaid_grade = \
                 textstat.flesch_kincaid_grade(self.text_no_feed)
-            self.readability_coleman_liau_index =
+            self.readability_coleman_liau_index = \
                 textstat.coleman_liau_index(self.text_no_feed)
-            self.readability_ari =
-                texstat.automated_readability_index(self.text_no_feed)
+            self.readability_ari = \
+                textstat.automated_readability_index(self.text_no_feed)
+            self.readability_linser_write = \
+                textstat.linsear_write_formula(self.text_no_feed)
+            self.readability_dale_chall = \
+                textstat.dale_chall_readability_score(self.text_no_feed)
+            self.readability_standard = \
+                textstat.text_standard(self.text_no_feed)
 
 
 
