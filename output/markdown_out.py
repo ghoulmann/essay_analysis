@@ -6,5 +6,5 @@ class MarkdownReport:
         self.filename = self.file_out.name
 
     def file_out(self):
-        return tempfile.NamedTemporaryFile(mode='w+b', bufsize=-1, suffix="",
-                       prefix=template, dir=None, delete=False)
+        output = tempfile.NamedTemporaryFile(mode='w+b', bufsize=-1, suffix="", prefix=template, dir=None, delete=False)
+        return output
