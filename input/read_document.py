@@ -84,11 +84,11 @@ class Sample:
 
             self.ws_tokens = self.ws_tokenize(self.text_no_feed)
             self.word_tokens_no_punct = self.tokenize_no_punctuation(self.text_no_feed)
-            self.readability_flesh_re = \
+            self.readability_flesch_re = \
                 textstat.flesch_reading_ease(self.text_no_feed)
             self.readability_smog_index = \
                 textstat.smog_index(self.text_no_feed)
-            self.readability_flesh_kincaid_grade = \
+            self.readability_flesch_kincaid_grade = \
                 textstat.flesch_kincaid_grade(self.text_no_feed)
             self.readability_coleman_liau_index = \
                 textstat.coleman_liau_index(self.text_no_feed)
