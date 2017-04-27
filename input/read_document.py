@@ -82,7 +82,7 @@ class Sample:
                 self.doc_pages = False
             self.freq_words = self.word_frequency(self.word_tokens_no_punct)
 
-            self.ws_tokens = self.ws_tokenize(self.text_no_feed)
+            self.ws_tokens = self.ws_tokenize(self.text_no_cr)
             self.word_tokens_no_punct = self.tokenize_no_punctuation(self.text_no_feed)
             self.readability_flesch_re = \
                 textstat.flesch_reading_ease(self.text_no_feed)
@@ -112,22 +112,26 @@ class Sample:
 
 
     def tokenize_no_punctuation(self, text):
-        text.translate(None, '!@#;.?!\":')
-        return self.ws_tokenize(text)
+        return text.translate(None, '!@#;.?!-\":')
+        #return self.ws_tokenize(text)
 
     def ws_tokenize(self, text):
-        self.tokenizer = nltk.tokenize.regexp.WhitespaceTokenizer()
+        text.translate(None, '!@#;.?!-":')
+        print text
         text = text.lower()
-        return self.tokenizer.tokenize(text)
-
-    """
-    Breaks the program - from an earlier version
-    def ws_tokenize(self, text):
+        print text
         self.tokenizer = nltk.tokenize.regexp.WhitespaceTokenizer()
-        text = text.lower
         return self.tokenizer.tokenize(text)
 
     """
+    #Breaks the program - from an earlier version
+    def ws_tokenize(self, text):
+        text = text.lower
+        self.tokenizer =  nltk.tokenize.regexp.WhitespaceTokenizer(text)
+        return self.tokenizer
+        #return self.tokenizer.tokenize(text)
+    """
+
 
     def syllables_per_word(self, text):
         self.word_syllables = []
