@@ -11,6 +11,9 @@ from input import read_document as input
 
 def main(path):
     """
+    Output some information about the WritingSample instance to
+    stdout.
+
     """
 
     Document = input.Sample(path)
@@ -27,6 +30,8 @@ def main(path):
     print("Example weak-verb usage: " + Document.weak_sentences_all[-2])
     for word, frequency in Document.freq_words:
         print(u'{} ({}x)'.format(word, frequency))
+    for word in Document.modal_dist:
+        print word
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Analyze Student Writing')
@@ -37,12 +42,7 @@ if __name__ == "__main__":
     parser.add_argument('-w', '--writer', help="the author of the paper to be analyzed", action="store", type=str)
     args = parser.parse_args()
 
-    """
-    .. todo:: add arguments for doc title and teacher name
-
-    """
-
-
+    # argparse test results
     if os.path.isfile(args.filename):
         filename = args.filename
 

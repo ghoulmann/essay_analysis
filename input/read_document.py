@@ -106,9 +106,9 @@ class Sample:
                 self.doc_pages = float(float(self.word_count)/float(250))
                     #self.doc_pages = \
                 #        float(float(self.word_count))/float(250)
-                if self.word_tokens_no_punct:
-                    self.freq_words = \
-                        self.word_frequency(self.word_tokens_no_punct)
+                self.freq_words = \
+                    self.word_frequency(self.word_tokens_no_punct)
+                self.modal_dist = self.modal_count(self.word_tokens_no_punct)
                 #self.ws_tokens = self.ws_tokenize(self.text_no_cr)
 
     def strip_punctuation(self, string_in):
@@ -195,3 +195,14 @@ class Sample:
     def syllable_count(self, word):
            self.d = cmudict.dict()
            return min([len([y for y in x if isdigit (y[-1])]) for x in self.d[str(word).lower()]])
+
+    def modal_count(self, text):
+        """
+        Return FreqDist of modal verbs in text
+        """
+        fdist = FreqDist(w.lower() for w in text)
+        modals = ['can', 'could', 'shall', 'should', 'will', 'would', 'do', 'does', 'did', 'may', 'might', 'must', 'has', 'have', 'had']
+        modals_freq = []
+        for m in modals:
+            modals_freq.append(str(m + ': ' + str(fdist[m])))
+        return modals_freq
