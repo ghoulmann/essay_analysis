@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os, sys
 import textract
-from mimetypes import MimeTypes
+from mimetypes import MimeTypes # Not necessary, we think
 import nltk
 from nltk import tokenize
 from nltk import pos_tag
@@ -20,17 +20,42 @@ import math
 
 
 """
-Creates document instance for analysis.
 
-Opens and reads document to string raw_text.
-A revision of document_in that relies on
-textract.
+
 """
 
 #from mimetypes import MimeTypes
 
 class Sample:
     def __init__(self, path):
+        """
+        Creates document instance for analysis.
+
+        Opens and reads document to string raw_text.
+        Textract interprets the document format and 
+        opens to plain text string (docx, pdf, odt, txt)
+        
+        Notes:
+        
+        Args:
+        
+        path (str): Path to file to be interpreted
+        
+        Attributes:
+        
+        sentence_count (int): Count the sentence tokens
+        passive_sentences (list): List of all sentences identified as passive
+        passive_sentence_count (int): count of items in passive_sentences
+        be_verb_count (int): count "to be" verbs in text
+        word_tokens_no_punct (list): words separated, stripped of punctuation, made lower case
+        flesch_re_key (str): reading ease score to description
+        freq_words (list or dict): frequency distribution of all words
+        modal_dist (list): frequency distribution of aux verbs
+        
+        
+        
+        
+        """
         self.user = ""
         self.path = path
         self.abs_path = os.path.abspath(self.path)
@@ -46,7 +71,7 @@ class Sample:
             self.ptext = re.sub("—", "--", self.ptext)
             self.ptext = re.sub("…", "...", self.ptext)
             self.text_no_feed = self.clean_new_lines(self.ptext)
-            # self.sentence_tokens = tokenize.sent_tokenize(self.text_no_feed)
+            # self.sentence_tokens = tokenize.sent_tokenize(self.text_no_feed) # probably to be deleted. Does not work
             self.sentence_tokens = self.sentence_tokenize(self.text_no_feed)
             if self.sentence_tokens:
                 self.sentence_count = len(self.sentence_tokens)
@@ -55,12 +80,12 @@ class Sample:
                 self.passive_sentence_count = len(self.passive_sentences)
                 self.percent_passive = (100 * \
                 (float(self.passive_sentence_count)/float(self.sentence_count)))
-                self.be_verb_analysis =             self.count_be_verbs(self.sentence_tokens)
+                self.be_verb_analysis = self.count_be_verbs(self.sentence_tokens)
                 self.be_verb_count = self.be_verb_analysis[0]
                 self.weak_sentences_all = self.be_verb_analysis[1]
                 self.weak_sentences_set = set(self.weak_sentences_all)
                 self.weak_sentences_count = len(self.weak_sentences_set)
-                self.weak_verbs_to_sentences = str(100 *        float(self.weak_sentences_count)/float(self.sentence_count)) + " %"
+                self.weak_verbs_to_sentences = str(100 * float(self.weak_sentences_count)/float(self.sentence_count)) + " %"
             except:
                 print("Error: Could not process passive voice analyses.")
                 print("Error: Could not process verb analyses.")
@@ -103,9 +128,7 @@ class Sample:
                 self.pos_counts = Counter(tag for word,tag in self.parts_of_speech)
                 self.pos_total = sum(self.pos_counts.values())
                 self.pos_freq = dict((word, float(count)/self.pos_total) for word,count in self.pos_counts.items())
-                self.doc_pages = float(float(self.word_count)/float(250))
-                    #self.doc_pages = \
-                #        float(float(self.word_count))/float(250)
+                self.doc_pages = float(float(self.word_count)/float(250)) # duplicate
                 self.freq_words = \
                     self.word_frequency(self.word_tokens_no_punct)
                 self.modal_dist = self.modal_count(self.word_tokens_no_punct)
@@ -115,8 +138,13 @@ class Sample:
         """
         Strip punctuation from string and make lower
 
-        Translate string to remove some common symbols
+        Given a string of sentences, translate string 
+        to remove some common symbols and conver caps
+        to lower case.
 
+        Args:
+        string_in (str): Text to strip punctuation from
+        
         return:
         str
         """
@@ -125,7 +153,14 @@ class Sample:
 
     def ws_tokenize(self, text):
         """
-        Make tokens that don't separate contractions.
+        Given string of words, return word tokens with contractions OK
+        
+        Other tokenizers tokenize punctuation. The WhitespaceTokenizer
+        is important because of contractions.
+        
+        Args:
+        
+        text (str)
         
         returns:
         list
@@ -151,6 +186,19 @@ class Sample:
         return self.word_syllables
 
     def polysyllables(self, text):
+        """
+        Given sting of full text, count polysllables.
+        
+        Count words in text string that have >= 3 syllables.
+        
+        Args:
+        
+        text (str)
+        
+        Returns:
+        int: polysllable word count in text arg
+        
+        """
         return textstat.textstat.polysyllabcount(text)
 
     def word_frequency(self, words):
@@ -160,6 +208,15 @@ class Sample:
         return self.word_dist.most_common(50)
 
     def word_tokenize_no_punct(self, text):
+        """
+        Make list of words without listing punctuation
+        
+        Args:
+            text (str): Plain text string
+        
+        Returns:
+             list of words
+        """
         tokenizer = RegexpTokenizer(r'\w+')
         return tokenizer.tokenize(text)
 
@@ -178,10 +235,28 @@ class Sample:
             print "Could not tokenize text."
             return False
     def clean_new_lines(self, paragraphs):
+        """
+        Strips new line characters except for new paragraphs
+        
+        """
+        
         self.text_no_cr = paragraphs.replace("\n\n", "TOADIES").replace("\r", " ").replace("\n", " ").replace("TOADIES", "\n")
         return self.text_no_cr
 
     def count_be_verbs(self, sentences):
+        """
+        Count be verbs in each sentence in a list.
+        
+        Loop through sentences to provide weak verb count.
+        If count >= 1, add sentence to list.
+        
+        Args:
+            sentences (str, list)
+            
+        Return:
+            list of be-verb count and stand-out sentences
+        
+        """
         self.verbs = [" am ", " is ", " are ", " was ", " were ", " be ", " being ", " been "]
         self.weak_sentences = []
         self.verb_count = 0
@@ -195,6 +270,17 @@ class Sample:
         return [self.verb_count, self.weak_sentences]
 
     def syllable_count(self, word):
+           """
+           Count syllables in a word.
+           
+           Uses NLTK dictionary to find word syllabication.
+           
+           Args:
+               word (string)
+           
+           Returns:
+               int syllable count
+           """ 
            self.d = cmudict.dict()
            return min([len([y for y in x if isdigit (y[-1])]) for x in self.d[str(word).lower()]])
 
