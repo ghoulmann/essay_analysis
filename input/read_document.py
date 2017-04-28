@@ -126,7 +126,9 @@ class Sample:
     def ws_tokenize(self, text):
         """
         Make tokens that don't separate contractions.
-
+        
+        returns:
+        list
         """
 
         self.tokenizer = nltk.tokenize.regexp.WhitespaceTokenizer()
