@@ -66,24 +66,10 @@ class Sample:
                 print("Error: Could not process verb analyses.")
             self.word_tokens = self.word_tokenize(self.text_no_feed)
             self.word_tokens_no_punct = self.word_tokenize_no_punct(self.text_no_feed)
-            if self.word_tokens_no_punct:
-                self.word_count = len(self.word_tokens_no_punct)
-                self.page_length = float(self.word_count)/float(250)
-                self.paper_count = int(math.ceil(self.page_length))
-                self.parts_of_speech = pos_tag(self.word_tokens_no_punct)
-                self.pos_counts = Counter(tag for word,tag in self.parts_of_speech)
-                self.pos_total = sum(self.pos_counts.values())
-                self.pos_freq = dict((word, float(count)/self.pos_total) for word,count in self.pos_counts.items())
-            if self.word_count:
-                self.doc_pages = float(float(self.word_count)/float(250))
-            elif self.word_tokens_no_punct:
-                self.doc_pages = float(float(self.word_tokens_no_punct)/float(250))
-            else:
-                self.doc_pages = False
-            self.freq_words = self.word_frequency(self.word_tokens_no_punct)
 
-            self.ws_tokens = self.ws_tokenize(self.text_no_cr)
-            self.word_tokens_no_punct = self.tokenize_no_punctuation(self.text_no_feed)
+            self.no_punct = self.strip_punctuation(self.text_no_feed)
+            # use this! It make lower and strips symbols
+            self.word_tokens_no_punct = self.ws_tokenize(self.no_punct)
             self.readability_flesch_re = \
                 textstat.flesch_reading_ease(self.text_no_feed)
             self.readability_smog_index = \
@@ -109,17 +95,40 @@ class Sample:
                 "* 30-49 : Difficult",
                 "* 0-29 : Very Confusing"
                 )
+            if self.word_tokens_no_punct:
+                self.word_count = len(self.word_tokens_no_punct)
+                self.page_length = float(self.word_count)/float(250)
+                self.paper_count = int(math.ceil(self.page_length))
+                self.parts_of_speech = pos_tag(self.word_tokens_no_punct)
+                self.pos_counts = Counter(tag for word,tag in self.parts_of_speech)
+                self.pos_total = sum(self.pos_counts.values())
+                self.pos_freq = dict((word, float(count)/self.pos_total) for word,count in self.pos_counts.items())
+                self.doc_pages = float(float(self.word_count)/float(250))
+                    #self.doc_pages = \
+                #        float(float(self.word_count))/float(250)
+                if self.word_tokens_no_punct:
+                    self.freq_words = \
+                        self.word_frequency(self.word_tokens_no_punct)
+                #self.ws_tokens = self.ws_tokenize(self.text_no_cr)
 
+    def strip_punctuation(self, string_in):
+        """
+        Strip punctuation from string and make lower
 
-    def tokenize_no_punctuation(self, text):
-        return text.translate(None, '!@#;.?!-\":')
-        #return self.ws_tokenize(text)
+        Translate string to remove some common symbols
+
+        return:
+        str
+        """
+        string_in = string_in.translate(None, ',.!?\"<>{}[]--@()\'--')
+        return str(string_in.lower())
 
     def ws_tokenize(self, text):
-        text.translate(None, '!@#;.?!-":')
-        print text
-        text = text.lower()
-        print text
+        """
+        Make tokens that don't separate contractions.
+
+        """
+
         self.tokenizer = nltk.tokenize.regexp.WhitespaceTokenizer()
         return self.tokenizer.tokenize(text)
 
