@@ -1,3 +1,9 @@
+"""Creates document instance for analysis for semantics and lexical statistics.
+
+Opens and reads document to string raw_text. Relies on textract to handle
+.txt, .odt, .pdf, docx, and .doc.
+"""
+
 # -*- coding: utf-8 -*-
 import os, sys
 import textract
@@ -19,18 +25,96 @@ from textstat.textstat import textstat
 import math
 
 
-"""
-Creates document instance for analysis.
 
-Opens and reads document to string raw_text.
-A revision of document_in that relies on
-textract.
-"""
 
 #from mimetypes import MimeTypes
 
 class Sample:
+    """Represents a document analysis.
+
+    Uses textract to read document into a long string.  The methods are various
+    sequences to get information to help make decisions for deliberate academic
+    writing.
+    """
+
     def __init__(self, path):
+        """All the properties belonging to an object based on the Sample class.
+
+        The properties here are determined by the methods or through arguments.
+
+        Public_attributes:
+        -user: (str) optional string to set username.
+        -path: (str) relative path to document.
+        -abs_path: (str) the absolute path to the document.
+        -file_name:  (str) the file name with extension of document (base
+        name).
+        -mime:  tbd
+        -guessed_type:  makes best guess of mimetype of document.
+        -file_type:  returns index[0] from guessed_type.
+        -raw_text:  (str) plain text extracted from .txt, .odt, .pdf, .docx,
+        and .doc.
+        -ptext:  (str) raw text after a series of regex expressions to
+        eliminate special characters.
+        -text_no_feed:  (str) ptext with most new line characters eliminated
+        /n/n stays intact.
+        -sentence_tokens:  list of all sentences in a comma separated list
+        derived by nltk.
+        -sentence_count:  (int) count of sentences found in list.
+        -passive_sentences:  list of passive sentences identified by the
+        passive module.
+        -passive_sentence_count:  count of the passive_sentences list.
+        -percent_passive:  (float) ratio of passive sentences to all sentences
+        in percent form.
+        -be_verb_analysis:  (int) sum number of occurrences of each to be verb
+        (am, is, are, was, were, be, being been).
+        -be_verb_count: tbd
+        -be_verb_analysis: tbd
+        -weak_sentences_all:  (int) sum of be verb analysis.
+        -weak_sentences_set:  (set) set of all sentences identified as
+        having to be verbs.
+        -weak_sentences_count:  (int) count of items in weak_sentences_set.
+        -weak_verbs_to_sentences:  (float) proportion of sentences with to
+        be to all sentences in percent (this might not be sound).
+        -word_tokens:  list of discreet words in text that breaks
+        contractions up (default nltk tokenizer).
+        -word_tokens_no_punct:  list of all words in text including
+        contractions but otherwise no punctuation.
+        -no_punct:  (str) full text string without sentence punctuation.
+        -word_tokens_no_punct:  uses white-space tokenizer to create a list
+        of all words.
+        readability_flesch_re:  (int) Flesch Reading Ease Score (numeric
+        score) made by textstat module.
+        readability_smog_index:  (int) grade level as determined by the
+        SMOG algorithum made by textstat module.
+        readability_flesch_kincaid_grade:  (int)  Flesch-Kincaid grade level
+        of reader made by textstat module.
+        readability_coleman_liau_index:  (int) grade level of reader as made by
+        textstat module.
+        readability_ari:  (int) grade leader of reader determined by
+        automated readability index algorithum implemented by textstat.
+        readability_linser_write:  FIX SPELLING grade level as determined
+        by Linsear Write algorithum implemented by textstat.
+        readability_dale_chall:  (int) grade level based on Dale-Chall
+        readability as determined by textstat.
+        readability_standard:  composite grade level based on readability
+        algorithums.
+        -flesch_re_key:  list for interpreting Flesch RE Score.
+        -word_count:  word count of document based on white space tokener,
+        this word count should be used.
+        -page_length:  (float) page length in decimal format given 250
+        words per page.
+        -paper_count:  (int) number of printed pages given 250 words per
+        page.
+        -parts_of_speech:  words with parts of speech tags.
+        -pos_counts:  values in word, tag couple grouped in a list.
+        -pos_total:  (int) sum of pos_counts values
+        -pos_freq:  (dict) word, ratio of whole
+        -doc_pages:  (float) page length based on 250 words per page
+        (warning, this is the second time this attribute is defined).
+        -freq_words:  word frequency count not standardized based on the
+        correct word tokener (not ratio, just count).
+        modal_dist:  count of auxillary verbs based on word_tokens_no_punct.
+        """
         self.user = ""
         self.path = path
         self.abs_path = os.path.abspath(self.path)
@@ -46,7 +130,6 @@ class Sample:
             self.ptext = re.sub("—", "--", self.ptext)
             self.ptext = re.sub("…", "...", self.ptext)
             self.text_no_feed = self.clean_new_lines(self.ptext)
-            # self.sentence_tokens = tokenize.sent_tokenize(self.text_no_feed)
             self.sentence_tokens = self.sentence_tokenize(self.text_no_feed)
             if self.sentence_tokens:
                 self.sentence_count = len(self.sentence_tokens)
@@ -55,7 +138,8 @@ class Sample:
                 self.passive_sentence_count = len(self.passive_sentences)
                 self.percent_passive = (100 * \
                 (float(self.passive_sentence_count)/float(self.sentence_count)))
-                self.be_verb_analysis =             self.count_be_verbs(self.sentence_tokens)
+                self.be_verb_analysis = \
+                    self.count_be_verbs(self.sentence_tokens)
                 self.be_verb_count = self.be_verb_analysis[0]
                 self.weak_sentences_all = self.be_verb_analysis[1]
                 self.weak_sentences_set = set(self.weak_sentences_all)
