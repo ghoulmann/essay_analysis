@@ -1,10 +1,11 @@
+# -*- coding: utf-8 -*-
 """Creates document instance for analysis for semantics and lexical statistics.
 
 Opens and reads document to string raw_text. Relies on textract to handle
 .txt, .odt, .pdf, docx, and .doc.
 """
 
-# -*- coding: utf-8 -*-
+
 import os, sys
 import textract
 from mimetypes import MimeTypes # Not necessary, we think

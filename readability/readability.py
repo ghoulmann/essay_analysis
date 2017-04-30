@@ -1,7 +1,7 @@
 from textstat.textstat import textstat
 
 
-fh = open("../data/example.txt", "r")
+fh = open("../samples/example.txt", "r")
 raw_text = fh.read()
 fh.close()
 
