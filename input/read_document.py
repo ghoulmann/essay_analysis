@@ -231,8 +231,9 @@ class Sample:
         string_in = string_in.translate(None, ',.!?\"<>{}[]--@()\'--')
         return str(string_in.lower())
 
-    """
+    
     def ws_tokenize(self, text):
+        """
         Given string of words, return word tokens with contractions OK
 
         Other tokenizers tokenize punctuation. The WhitespaceTokenizer
@@ -243,11 +244,11 @@ class Sample:
 
         returns:
         list
-
+        """
 
         self.tokenizer = nltk.tokenize.regexp.WhitespaceTokenizer()
         return self.tokenizer.tokenize(text)
-    """
+
 
     def syllables_per_word(self, text):
         self.word_syllables = []
