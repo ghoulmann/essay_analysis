@@ -28,12 +28,11 @@ def main(path):
     print("Sentence Count: " + str(Document.sentence_count))
     print("Example passive sentence from document: " + Document.passive_sentences[-1])
     print("Example weak-verb usage: " + Document.weak_sentences_all[-2])
-    print("Sum of 'to be' usage:" + Document.be_verb_analysis)
-    print("Readability (Flesch Reading Ease: " + Doc.readability_flesch_re)
-    print("Readability (SMOG): " + Doc.readability_smog_index)
-    print("Readability (ARI): " + Doc.readability_ari)
-    for word, frequency in Document.freq_words:
-        print(u'{} ({}x)'.format(word, frequency))
+    print("Sum of 'to be' usage:" + str(Document.be_verb_analysis))
+    print("Readability (Flesch Reading Ease: " + str(Document.readability_flesch_re))
+    print("Readability (SMOG): " + str(Document.readability_smog_index))
+    print("Readability (ARI): " + str(Document.readability_ari))
+    for word, frequency in #Document.freq_words:
     for word in Document.modal_dist:
         print word
 
