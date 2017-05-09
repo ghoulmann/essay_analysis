@@ -32,9 +32,9 @@ def main(path):
     print("Readability (Flesch Reading Ease: " + str(Document.readability_flesch_re))
     print("Readability (SMOG): " + str(Document.readability_smog_index))
     print("Readability (ARI): " + str(Document.readability_ari))
-    for word, frequency in #Document.freq_words:
-    for word in Document.modal_dist:
-        print word
+    #for word, frequency in Document.freq_words:
+    #for word in Document.modal_dist:
+    #    print word
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Analyze Student Writing')
