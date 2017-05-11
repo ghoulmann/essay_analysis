@@ -216,7 +216,7 @@ class Sample:
 
     def strip_punctuation(self, string_in):
         """
-        Strip punctuation from string and make lower
+        Strip punctuation from string and make lower case.
 
         Given a string of sentences, translate string
         to remove some common symbols and conver caps
@@ -231,10 +231,10 @@ class Sample:
         string_in = string_in.translate(None, ',.!?\"<>{}[]--@()\'--')
         return str(string_in.lower())
 
-    
+
     def ws_tokenize(self, text):
         """
-        Given string of words, return word tokens with contractions OK
+        Given string of words, return word tokens with  contractions OK.
 
         Other tokenizers tokenize punctuation. The WhitespaceTokenizer
         is important because of contractions.
@@ -245,12 +245,23 @@ class Sample:
         returns:
         list
         """
-
         self.tokenizer = nltk.tokenize.regexp.WhitespaceTokenizer()
         return self.tokenizer.tokenize(text)
 
 
     def syllables_per_word(self, text):
+        """
+        Return count of syllables per word.
+
+        Loops through all words to add word and syllable
+        count to a list.
+
+        Args:
+        text (str)
+
+        Returns:
+        list
+        """
         self.word_syllables = []
         for word in text:
             self.word_syllables.append([word, textstat.textstat.syllable_count(word)])
@@ -258,13 +269,12 @@ class Sample:
 
     def polysyllables(self, text):
         """
-        Given sting of full text, count polysllables.
+        Count polysyllables.
 
         Count words in text string that have >= 3 syllables.
 
         Args:
-
-        text (str)
+        text(str)
 
         Returns:
         int: polysllable word count in text arg
@@ -273,14 +283,24 @@ class Sample:
         return textstat.textstat.polysyllabcount(text)
 
     def word_frequency(self, words):
-        #words = [word for word in words if not word.isnumeric()]
+        """
+        List 50 most common words in tokenized list.
+
+        memo: words = [word for word in words if not word.isnumeric()].
+
+        Args:
+        text(str)
+
+        Returns:
+        list
+        """
         words = [word.lower() for word in words]
         self.word_dist = FreqDist(words)
         return self.word_dist.most_common(50)
 
     def word_tokenize_no_punct(self, text):
         """
-        Make list of words without listing punctuation
+        Make list of words without listing punctuation.
 
         Args:
             text (str): Plain text string
@@ -292,6 +312,17 @@ class Sample:
         return tokenizer.tokenize(text)
 
     def word_tokenize(self, paragraph):
+        """
+        Tokenize words from long string that includes sentences.
+
+        Uses default tokenizer from nltk.
+
+        Args:
+        paragraph (str)
+
+        Return:
+        list
+        """
         try:
             self.word_tokens = tokenize.word_tokenize(paragraph)
             return self.word_tokens
@@ -299,6 +330,17 @@ class Sample:
             print("Error: Cannot perform word analyses.")
             return False
     def sentence_tokenize(self, paragraphs):
+        """
+        Tokenize sentences.
+
+        Uses default sent tokenizer.
+
+        Args:
+        paragraph (str)
+
+        Returns:
+        list
+        """
         try:
             self.sentences = tokenize.sent_tokenize(paragraphs)
             return self.sentences
@@ -306,11 +348,7 @@ class Sample:
             print "Could not tokenize text."
             return False
     def clean_new_lines(self, paragraphs):
-        """
-        Strips new line characters except for new paragraphs
-
-        """
-
+        """Strip new line characters except for new paragraphs."""
         self.text_no_cr = paragraphs.replace("\n\n", "TOADIES").replace("\r", " ").replace("\n", " ").replace("TOADIES", "\n")
         return self.text_no_cr
 
@@ -357,7 +395,13 @@ class Sample:
 
     def modal_count(self, text):
         """
-        Return FreqDist of modal verbs in text
+        Return FreqDist of modal verbs in text.
+
+        Args:
+        text (str)
+
+        Return:
+        list
         """
         fdist = FreqDist(w.lower() for w in text)
         modals = ['can', 'could', 'shall', 'should', 'will', 'would', 'do', 'does', 'did', 'may', 'might', 'must', 'has', 'have', 'had']
