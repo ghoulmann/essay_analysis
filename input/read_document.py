@@ -6,25 +6,24 @@ Opens and reads document to string raw_text. Relies on textract to handle
 """
 
 
-import os
-import sys
-import textract
-from mimetypes import MimeTypes  # Not necessary, we think
-import nltk
-from nltk import tokenize
-from nltk import pos_tag
-from passive.passive import main as passive
-import re
-from collections import Counter
-from nltk import FreqDist
-from nltk.corpus import cmudict
-from curses.ascii import isdigit
-from nltk.tokenize import RegexpTokenizer
-from nltk.corpus import stopwords
-import string
-import nltk
-from textstat.textstat import textstat
 import math
+import os
+import re
+import string
+import sys
+from collections import Counter
+from curses.ascii import isdigit
+from mimetypes import MimeTypes  # Not necessary, we think
+
+import nltk
+import textract
+from nltk import FreqDist, pos_tag, tokenize
+from nltk.corpus import cmudict, stopwords
+from nltk.tokenize import RegexpTokenizer
+
+from passive.passive import main as passive
+from textstat.textstat import textstat
+
 
 # from mimetypes import MimeTypes
 
@@ -169,8 +168,8 @@ class Sample:
                                                    float
                                                    (self.weak_sentences_count)
                                                    / float
-                                                   (self.sentence_count)) \
-                                                   + " %"
+                                                   (self.sentence_count)
+                                                   ) + " %"
             except:
                 print("Error: Could not process passive voice analyses.")
                 print("Error: Could not process verb analyses.")
@@ -393,7 +392,6 @@ class Sample:
         return [self.verb_count, self.weak_sentences]
 
     def syllable_count(self, word):
-
         """
         Count syllables in a word.
 
@@ -414,10 +412,10 @@ class Sample:
         Return FreqDist of modal verbs in text.
 
         Args:
-        text (str)
+            text (str)
 
         Return:
-        list
+            list
         """
         fdist = FreqDist(w.lower() for w in text)
         modals = ['can', 'could', 'shall', 'should', 'will', 'would', 'do',
