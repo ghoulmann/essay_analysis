@@ -6,9 +6,10 @@ Opens and reads document to string raw_text. Relies on textract to handle
 """
 
 
-import os, sys
+import os
+import sys
 import textract
-from mimetypes import MimeTypes # Not necessary, we think
+from mimetypes import MimeTypes  # Not necessary, we think
 import nltk
 from nltk import tokenize
 from nltk import pos_tag
@@ -25,10 +26,8 @@ import nltk
 from textstat.textstat import textstat
 import math
 
+# from mimetypes import MimeTypes
 
-
-
-#from mimetypes import MimeTypes
 
 class Sample:
     """Represents a document analysis.
@@ -126,7 +125,8 @@ class Sample:
         passive_sentences (list): List of all sentences identified as passive
         passive_sentence_count (int): count of items in passive_sentences
         be_verb_count (int): count "to be" verbs in text
-        word_tokens_no_punct (list): words separated, stripped of punctuation, made lower case
+        word_tokens_no_punct (list): words separated, stripped of punctuation,
+         made lower case
         flesch_re_key (str): reading ease score to description
         freq_words (list or dict): frequency distribution of all words
         modal_dist (list): frequency distribution of aux verbs
@@ -140,37 +140,43 @@ class Sample:
             self.guessed_type = self.mime.guess_type(self.path)
             self.file_type = self.guessed_type[0]
             self.raw_text = textract.process(self.path)
-            self.ptext = re.sub(u'[\u201c\u201d]','"',self.raw_text)
+            self.ptext = re.sub(u'[\u201c\u201d]', '"', self.raw_text)
             self.ptext = re.sub(u"\u2014", "--", self.ptext)
             self.ptext = re.sub(",", ",", self.ptext)
             self.ptext = re.sub("—", "--", self.ptext)
             self.ptext = re.sub("…", "...", self.ptext)
             self.text_no_feed = self.clean_new_lines(self.ptext)
-            # self.sentence_tokens = tokenize.sent_tokenize(self.text_no_feed) # probably to be deleted. Does not work
             self.sentence_tokens = self.sentence_tokenize(self.text_no_feed)
             if self.sentence_tokens:
                 self.sentence_count = len(self.sentence_tokens)
             try:
                 self.passive_sentences = passive(self.text_no_feed)
                 self.passive_sentence_count = len(self.passive_sentences)
-                self.percent_passive = (100 * \
-                (float(self.passive_sentence_count)/float(self.sentence_count)))
+                self.percent_passive = (100 *
+                                        (float(self.passive_sentence_count) /
+                                         float(self.sentence_ount)))
 
                 self.be_verb_analysis = \
                     self.count_be_verbs(self.sentence_tokens)
                 # Remove
-                #self.be_verb_analysis = \
-                    #self.count_be_verbs(self.sentence_tokens)
+                # self.be_verb_analysis = \
+                # self.count_be_verbs(self.sentence_tokens)
                 self.be_verb_count = self.be_verb_analysis[0]
                 self.weak_sentences_all = self.be_verb_analysis[1]
                 self.weak_sentences_set = set(self.weak_sentences_all)
                 self.weak_sentences_count = len(self.weak_sentences_set)
-                self.weak_verbs_to_sentences = str(100 * float(self.weak_sentences_count)/float(self.sentence_count)) + " %"
+                self.weak_verbs_to_sentences = str(100 *
+                                                   float
+                                                   (self.weak_sentences_count)
+                                                   / float
+                                                   (self.sentence_count)) \
+                                                   + " %"
             except:
                 print("Error: Could not process passive voice analyses.")
                 print("Error: Could not process verb analyses.")
             self.word_tokens = self.word_tokenize(self.text_no_feed)
-            self.word_tokens_no_punct = self.word_tokenize_no_punct(self.text_no_feed)
+            self.word_tokens_no_punct = \
+                self.word_tokenize_no_punct(self.text_no_feed)
             self.no_punct = self.strip_punctuation(self.text_no_feed)
             # use this! It make lower and strips symbols
             self.word_tokens_no_punct = self.ws_tokenize(self.no_punct)
@@ -204,15 +210,16 @@ class Sample:
                 self.page_length = float(self.word_count)/float(250)
                 self.paper_count = int(math.ceil(self.page_length))
                 self.parts_of_speech = pos_tag(self.word_tokens_no_punct)
-                self.pos_counts = Counter(tag for word,tag in self.parts_of_speech)
+                self.pos_counts = Counter(tag for word, tag in
+                                          self.parts_of_speech)
                 self.pos_total = sum(self.pos_counts.values())
-                self.pos_freq = dict((word, float(count)/self.pos_total) for word,count in self.pos_counts.items())
-                self.doc_pages = float(float(self.word_count)/float(250)) \
-                    #duplicate
+                self.pos_freq = dict((word, float(count)/self.pos_total) for
+                                     word, count in self.pos_counts.items())
+                self.doc_pages = float(float(self.word_count)/float(250))
                 self.freq_words = \
                     self.word_frequency(self.word_tokens_no_punct)
                 self.modal_dist = self.modal_count(self.word_tokens_no_punct)
-                #self.ws_tokens = self.ws_tokenize(self.text_no_cr)
+                # self.ws_tokens = self.ws_tokenize(self.text_no_cr)
 
     def strip_punctuation(self, string_in):
         """
@@ -231,7 +238,6 @@ class Sample:
         string_in = string_in.translate(None, ',.!?\"<>{}[]--@()\'--')
         return str(string_in.lower())
 
-
     def ws_tokenize(self, text):
         """
         Given string of words, return word tokens with  contractions OK.
@@ -248,7 +254,6 @@ class Sample:
         self.tokenizer = nltk.tokenize.regexp.WhitespaceTokenizer()
         return self.tokenizer.tokenize(text)
 
-
     def syllables_per_word(self, text):
         """
         Return count of syllables per word.
@@ -264,7 +269,9 @@ class Sample:
         """
         self.word_syllables = []
         for word in text:
-            self.word_syllables.append([word, textstat.textstat.syllable_count(word)])
+            self.word_syllables.append([word,
+                                        textstat.textstat.syllable_count(
+                                            word)])
         return self.word_syllables
 
     def polysyllables(self, text):
@@ -329,6 +336,7 @@ class Sample:
         except:
             print("Error: Cannot perform word analyses.")
             return False
+
     def sentence_tokenize(self, paragraphs):
         """
         Tokenize sentences.
@@ -347,9 +355,15 @@ class Sample:
         except:
             print "Could not tokenize text."
             return False
+
     def clean_new_lines(self, paragraphs):
         """Strip new line characters except for new paragraphs."""
-        self.text_no_cr = paragraphs.replace("\n\n", "TOADIES").replace("\r", " ").replace("\n", " ").replace("TOADIES", "\n")
+        self.text_no_cr =
+        paragraphs.replace("\n\n",
+                           "TOADIES").replace("\r",
+                                              "").replace("\n",
+                                                          "").replace(
+                                                              "TOADIES", "\n")
         return self.text_no_cr
 
     def count_be_verbs(self, sentences):
@@ -366,7 +380,8 @@ class Sample:
             list of be-verb count and stand-out sentences
 
         """
-        self.verbs = [" am ", " is ", " are ", " was ", " were ", " be ", " being ", " been "]
+        self.verbs = [" am ", " is ", " are ", " was ", " were ", " be ", "
+                      being ", " been "]
         self.weak_sentences = []
         self.verb_count = 0
         for sentence in sentences:
@@ -375,23 +390,24 @@ class Sample:
                     self.verb_count = self.verb_count + 1
                     self.weak_sentences.append(sentence)
 
-
         return [self.verb_count, self.weak_sentences]
 
     def syllable_count(self, word):
-           """
-           Count syllables in a word.
 
-           Uses NLTK dictionary to find word syllabication.
+        """
+        Count syllables in a word.
 
-           Args:
-               word (string)
+        Uses NLTK dictionary to find word syllabication.
 
-           Returns:
-               int syllable count
-           """
-           self.d = cmudict.dict()
-           return min([len([y for y in x if isdigit (y[-1])]) for x in self.d[str(word).lower()]])
+        Args:
+            word (string)
+
+        Returns:
+            int syllable count
+        """
+        self.d = cmudict.dict()
+        return min([len([y for y in x if isdigit(y[-1])])
+                    for x in self.d[str(word).lower()]])
 
     def modal_count(self, text):
         """
@@ -404,7 +420,8 @@ class Sample:
         list
         """
         fdist = FreqDist(w.lower() for w in text)
-        modals = ['can', 'could', 'shall', 'should', 'will', 'would', 'do', 'does', 'did', 'may', 'might', 'must', 'has', 'have', 'had']
+        modals = ['can', 'could', 'shall', 'should', 'will', 'would', 'do',
+                  'does', 'did', 'may', 'might', 'must', 'has', 'have', 'had']
         modals_freq = []
         for m in modals:
             modals_freq.append(str(m + ': ' + str(fdist[m])))
