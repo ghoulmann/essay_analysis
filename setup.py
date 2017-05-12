@@ -5,7 +5,7 @@ BASE_CVS_URL = 'https://github.com/ghoulmann/essay-analysis'
 
 setup(
     name='EssayAnalysis',
-    packages=['EssayAnalysis', 'EssayAnalysis.input', 'EssayAnalysis.passive', 'EssayAnalysis.textract'],
+    packages=['EssayAnalysis', 'EssayAnalysis.analyze', 'EssayAnalysis.input', 'EssayAnalysis.passive', 'EssayAnalysis.textract'],
     version=VERSION,
     author='Rik Goldman',
     author_email='rikgoldman@gmail.com',

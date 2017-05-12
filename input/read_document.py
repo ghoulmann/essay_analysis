@@ -146,33 +146,19 @@ class Sample:
             self.ptext = re.sub("…", "...", self.ptext)
             self.text_no_feed = self.clean_new_lines(self.ptext)
             self.sentence_tokens = self.sentence_tokenize(self.text_no_feed)
-            if self.sentence_tokens:
-                self.sentence_count = len(self.sentence_tokens)
-            try:
-                self.passive_sentences = passive(self.text_no_feed)
-                self.passive_sentence_count = len(self.passive_sentences)
-                self.percent_passive = (100 *
+            self.sentence_count = len(self.sentence_tokens)
+            self.passive_sentences = passive(self.text_no_feed)
+            self.passive_sentence_count = len(self.passive_sentences)
+            self.percent_passive = (100 *
                                         (float(self.passive_sentence_count) /
-                                         float(self.sentence_ount)))
+                                         float(self.sentence_count)))
 
-                self.be_verb_analysis = \
-                    self.count_be_verbs(self.sentence_tokens)
-                # Remove
-                # self.be_verb_analysis = \
-                # self.count_be_verbs(self.sentence_tokens)
-                self.be_verb_count = self.be_verb_analysis[0]
-                self.weak_sentences_all = self.be_verb_analysis[1]
-                self.weak_sentences_set = set(self.weak_sentences_all)
-                self.weak_sentences_count = len(self.weak_sentences_set)
-                self.weak_verbs_to_sentences = str(100 *
-                                                   float
-                                                   (self.weak_sentences_count)
-                                                   / float
-                                                   (self.sentence_count)
-                                                   ) + " %"
-            except:
-                print("Error: Could not process passive voice analyses.")
-                print("Error: Could not process verb analyses.")
+            self.be_verb_analysis = self.count_be_verbs(self.sentence_tokens)
+            self.be_verb_count = self.be_verb_analysis[0]
+            self.weak_sentences_all = self.be_verb_analysis[1]
+            self.weak_sentences_set = set(self.weak_sentences_all)
+            self.weak_sentences_count = len(self.weak_sentences_set)
+            self.weak_verbs_to_sentences = 100 * float(self.weak_sentences_count) / float(self.sentence_count)
             self.word_tokens = self.word_tokenize(self.text_no_feed)
             self.word_tokens_no_punct = \
                 self.word_tokenize_no_punct(self.text_no_feed)
@@ -357,8 +343,8 @@ class Sample:
 
     def clean_new_lines(self, paragraphs):
         """Strip new line characters except for new paragraphs."""
-        self.text_no_cr =
-        paragraphs.replace("\n\n",
+        self.text_no_cr =\
+            paragraphs.replace("\n\n",
                            "TOADIES").replace("\r",
                                               "").replace("\n",
                                                           "").replace(
@@ -379,8 +365,8 @@ class Sample:
             list of be-verb count and stand-out sentences
 
         """
-        self.verbs = [" am ", " is ", " are ", " was ", " were ", " be ", "
-                      being ", " been "]
+        self.verbs = [" am ", " is ", " are ", " was ", " were ", " be ",\
+            "being ", " been "]
         self.weak_sentences = []
         self.verb_count = 0
         for sentence in sentences:
